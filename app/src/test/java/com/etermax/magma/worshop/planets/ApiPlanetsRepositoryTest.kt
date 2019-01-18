@@ -2,17 +2,19 @@ package com.etermax.magma.worshop.planets
 
 import com.etermax.magma.worshop.infoplanets.core.domain.Planet
 import com.etermax.magma.worshop.infoplanets.infrastructure.ApiPlanetsRepository
+import com.etermax.magma.worshop.infoplanets.infrastructure.BadResponse
 import com.etermax.magma.worshop.infoplanets.infrastructure.PlanetClient
 import com.etermax.magma.worshop.infoplanets.infrastructure.PlanetResponse
+import okhttp3.MediaType
+import okhttp3.ResponseBody
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import retrofit2.Call
 import retrofit2.Response
-import java.net.ResponseCache
 import java.util.*
-
 
 class ApiPlanetsRepositoryTest {
 
@@ -21,6 +23,7 @@ class ApiPlanetsRepositoryTest {
     private lateinit var receivedPlanet: Planet
     private lateinit var validResponse: Response<PlanetResponse>
     private lateinit var planetResponse: PlanetResponse
+    private var exception: Throwable? = null
 
     /*
     parseo correcto
@@ -37,6 +40,28 @@ class ApiPlanetsRepositoryTest {
         whenFindPlanet()
 
         thenReturnPlanet()
+    }
+
+    @Test
+    fun apiReturnBadResponse(){
+        givenApiReturnBadResponse()
+        givenAPlanetRepository()
+
+        whenFindPlanet()
+
+        thenExceptionIsThrown()
+    }
+
+    private fun thenExceptionIsThrown() {
+        assertThat(exception).isNotNull()
+        assertThat(exception).isInstanceOf(BadResponse::class.java)
+    }
+
+    private fun givenApiReturnBadResponse() {
+        val call: Call<PlanetResponse> = mock(Call::class.java) as Call<PlanetResponse>
+        val badResponse = Response.error<PlanetResponse>(403, ResponseBody.create(MediaType.parse("APPLICATION/JSON"), "" ))
+        `when`(call.execute()).thenReturn(badResponse)
+        client = mock(PlanetClient::class.java).also { `when`(it.findPlanet(PLANET_ID)).thenReturn(call) }
     }
 
     private fun thenReturnPlanet() {
@@ -56,7 +81,7 @@ class ApiPlanetsRepositoryTest {
     }
 
     private fun whenFindPlanet() {
-        receivedPlanet = apiPlanetsRepository.findById(PLANET_ID)
+        exception = catchThrowable {  receivedPlanet = apiPlanetsRepository.findById(PLANET_ID) }
     }
 
     private fun givenAPlanetRepository() {
