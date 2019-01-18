@@ -1,4 +1,4 @@
-package com.etermax.magma.worshop.planets
+package com.etermax.magma.worshop.planets.infrastructure
 
 import com.etermax.magma.worshop.infoplanets.core.domain.Planet
 import com.etermax.magma.worshop.infoplanets.infrastructure.ApiPlanetsRepository
@@ -52,16 +52,31 @@ class ApiPlanetsRepositoryTest {
         thenExceptionIsThrown()
     }
 
+    @Test
+    fun apiReturnEmptyResponse(){
+        givenApiReturnResponseWithNullBody()
+        givenAPlanetRepository()
+
+        whenFindPlanet()
+
+        thenExceptionIsThrown()
+    }
+
+    private fun givenApiReturnResponseWithNullBody() {
+        val emptyResponse = mock(Response::class.java) as Response<PlanetResponse>
+        `when`(emptyResponse.body()).thenReturn(null)
+        `when`(emptyResponse.isSuccessful).thenReturn(true)
+        mockClientAndResponse(emptyResponse)
+    }
+
     private fun thenExceptionIsThrown() {
         assertThat(exception).isNotNull()
         assertThat(exception).isInstanceOf(BadResponse::class.java)
     }
 
     private fun givenApiReturnBadResponse() {
-        val call: Call<PlanetResponse> = mock(Call::class.java) as Call<PlanetResponse>
         val badResponse = Response.error<PlanetResponse>(403, ResponseBody.create(MediaType.parse("APPLICATION/JSON"), "" ))
-        `when`(call.execute()).thenReturn(badResponse)
-        client = mock(PlanetClient::class.java).also { `when`(it.findPlanet(PLANET_ID)).thenReturn(call) }
+        mockClientAndResponse(badResponse)
     }
 
     private fun thenReturnPlanet() {
@@ -89,11 +104,29 @@ class ApiPlanetsRepositoryTest {
     }
 
     private fun givenThatApiReturnValidResponse() {
-        planetResponse = PlanetResponse(NAME, ROTATION_PERIOD, ORBITAL_PERIOD, DIAMETER, CLIMATE, GRAVITY, TERRAIN,
-            SURFACE_WATER, POPULATION, RESIDENTS, FILMS, CREATED, EDITED, URL)
+        planetResponse = PlanetResponse(
+            NAME,
+            ROTATION_PERIOD,
+            ORBITAL_PERIOD,
+            DIAMETER,
+            CLIMATE,
+            GRAVITY,
+            TERRAIN,
+            SURFACE_WATER,
+            POPULATION,
+            RESIDENTS,
+            FILMS,
+            CREATED,
+            EDITED,
+            URL
+        )
         validResponse = Response.success(planetResponse)
+        mockClientAndResponse(validResponse)
+    }
+
+    private fun mockClientAndResponse(response: Response<PlanetResponse> ){
         val call: Call<PlanetResponse> = mock(Call::class.java) as Call<PlanetResponse>
-        `when`(call.execute()).thenReturn(validResponse)
+        `when`(call.execute()).thenReturn(response)
         client = mock(PlanetClient::class.java).also { `when`(it.findPlanet(PLANET_ID)).thenReturn(call) }
     }
 
