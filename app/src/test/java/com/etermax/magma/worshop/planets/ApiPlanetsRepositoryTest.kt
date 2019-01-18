@@ -4,8 +4,13 @@ import com.etermax.magma.worshop.infoplanets.core.domain.Planet
 import com.etermax.magma.worshop.infoplanets.infrastructure.ApiPlanetsRepository
 import com.etermax.magma.worshop.infoplanets.infrastructure.PlanetClient
 import com.etermax.magma.worshop.infoplanets.infrastructure.PlanetResponse
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
+import retrofit2.Call
 import retrofit2.Response
+import java.net.ResponseCache
 import java.util.*
 
 
@@ -25,7 +30,7 @@ class ApiPlanetsRepositoryTest {
      */
 
     @Test
-    fun sjdfkdjfkdjfkd() {
+    fun apiResponseSuccessfullyReturningAPlanet() {
         givenThatApiReturnValidResponse()
         givenAPlanetRepository()
 
@@ -35,7 +40,19 @@ class ApiPlanetsRepositoryTest {
     }
 
     private fun thenReturnPlanet() {
-
+        assertThat(receivedPlanet.climate).isEqualTo(CLIMATE)
+        assertThat(receivedPlanet.rotationPeriod).isEqualTo(ROTATION_PERIOD)
+        assertThat(receivedPlanet.orbitalPeriod).isEqualTo(ORBITAL_PERIOD)
+        assertThat(receivedPlanet.name).isEqualTo(NAME)
+        assertThat(receivedPlanet.gravity).isEqualTo(GRAVITY)
+        assertThat(receivedPlanet.terrain).isEqualTo(TERRAIN)
+        assertThat(receivedPlanet.surfaceWater).isEqualTo(SURFACE_WATER)
+        assertThat(receivedPlanet.residents).isEqualTo(RESIDENTS)
+        assertThat(receivedPlanet.films).isEqualTo(FILMS)
+        assertThat(receivedPlanet.created).isEqualTo(CREATED)
+        assertThat(receivedPlanet.edited).isEqualTo(EDITED)
+        assertThat(receivedPlanet.url).isEqualTo(URL)
+        assertThat(receivedPlanet.diameter).isEqualTo(DIAMETER)
     }
 
     private fun whenFindPlanet() {
@@ -47,45 +64,35 @@ class ApiPlanetsRepositoryTest {
     }
 
     private fun givenThatApiReturnValidResponse() {
-        planetResponse = PlanetResponse(
-            name,
-            rotationPeriod,
-            orbitalPeriod,
-            diameter,
-            climate,
-            gravity,
-            terrain,
-            surfaceWater,
-            population,
-            residents,
-            films,
-            created,
-            edited,
-            url
-
-
-        )
-
+        planetResponse = PlanetResponse(NAME, ROTATION_PERIOD, ORBITAL_PERIOD, DIAMETER, CLIMATE, GRAVITY, TERRAIN,
+            SURFACE_WATER, POPULATION, RESIDENTS, FILMS, CREATED, EDITED, URL)
         validResponse = Response.success(planetResponse)
+        val call: Call<PlanetResponse> = mock(Call::class.java) as Call<PlanetResponse>
+        `when`(call.execute()).thenReturn(validResponse)
+        client = mock(PlanetClient::class.java).also { `when`(it.findPlanet(PLANET_ID)).thenReturn(call) }
     }
 
     private companion object {
         const val PLANET_ID = 1L
+        const val NAME = "Alderaan"
+        const val ROTATION_PERIOD = 24
+        const val ORBITAL_PERIOD = 364
+        const val DIAMETER = 12500
+        const val CLIMATE = "temperate"
+        const val GRAVITY = "1 standard"
+        const val TERRAIN = "grasslands, mountains"
+        const val SURFACE_WATER = 40
+        const val POPULATION = 2000000000L
+        val RESIDENTS = listOf(
+            "https://swapi.co/api/people/5/",
+            "https://swapi.co/api/people/68/",
+            "https://swapi.co/api/people/81/"
+        )
 
-        val name = "Alderaan"
-        val rotationPeriod = 24
-        val orbitalPeriod = 364
-        val diameter = 12500
-        val climate: String
-        val gravity: String
-        val terrain: String
-        val surfaceWater: Int
-        val population: Long
-        val residents: List<String>
-        val films: List<String>
-        val created: Date
-        val edited: Date
-        val url: String
+        val FILMS = listOf("https://swapi.co/api/films/6/", "https://swapi.co/api/films/1/")
+        val CREATED = Date()
+        val EDITED = Date()
+        const val URL = "https://swapi.co/api/planets/2/"
     }
 
 

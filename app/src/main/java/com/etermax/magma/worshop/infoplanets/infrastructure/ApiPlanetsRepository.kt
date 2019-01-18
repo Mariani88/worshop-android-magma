@@ -7,7 +7,6 @@ class ApiPlanetsRepository(private val client: PlanetClient): PlanetRepository {
 
     override fun findById(planetId: Long): Planet {
         val response = client.findPlanet(planetId).execute()
-        PlanetResponse.toPlanet(response.body()!!)
-        return Planet()
+        return PlanetResponse.toPlanet(response.body()!!)
     }
 }
