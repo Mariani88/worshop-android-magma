@@ -1,5 +1,6 @@
 package com.etermax.magma.worshop.infoplanets.infrastructure
 
+import com.etermax.magma.worshop.infoplanets.core.domain.Planet
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
@@ -19,6 +20,13 @@ class PlanetResponse(
     @JsonProperty("edited") val edited: Date,
     @JsonProperty("url") val url: String
 ) {
+
+    companion object {
+
+        fun toPlanet(planetResponse: PlanetResponse): Planet {
+            return Planet()
+        }
+    }
 
 
 //    {
