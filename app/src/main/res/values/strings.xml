@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Worshop</string>
+    <string name="find">Find</string>
+    <string name="orbital_days">Orbital days: %s</string>
+    <string name="rotation_days">Rotation days: %s</string>
+    <string name="name">Name: %s</string>
 </resources>

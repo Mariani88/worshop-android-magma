@@ -154,15 +154,7 @@ class ApiPlanetsRepositoryTest {
     }
 
 
-    /*
-    const val URL = "https://swapi.co/api/"
-    val retrofit = Retrofit.Builder()
-            .baseUrl(URL)
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build()
 
-        val client = retrofit.create<PlanetClient>(PlanetClient::class.java)
-     */
 
 
 }
