@@ -19,8 +19,4 @@ class MainPresenter(private val mainView: MainView, private val findPlanet: Find
             .subscribe({ mainView.showInfoPlanet(it) }, { mainView.showErrorMessage() })
 
     private fun Planet.toReducedDataModel() = InfoPlanetReducedDataModel(name, orbitalPeriod, rotationPeriod)
-
-    private companion object {
-
-    }
 }
