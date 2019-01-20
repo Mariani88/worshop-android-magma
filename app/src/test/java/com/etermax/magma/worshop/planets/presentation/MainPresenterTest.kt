@@ -24,11 +24,6 @@ class MainPresenterTest {
     private lateinit var findPlanet: FindPlanet
     private lateinit var planet: Planet
 
-    //mostrar buscando
-    //pegarle a la accion
-    //Pegarle al metodo que muestra en la view
-    //pegarle a la view cuando falla
-
     @Test
     fun findInfoPlanetShowSearching(){
         givenAFindAction()
