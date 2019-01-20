@@ -40,13 +40,13 @@ class MainActivity : AppCompatActivity(), MainView {
                 resources.getString(R.string.rotation_days).format("")
     }
 
-    override fun showError(errorMessage: String) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-    }
-
     private fun createPresenter(): MainPresenter {
         val apiPlanetsRepository = ApiPlanetsRepository(infoPlanetApiClient())
         return MainPresenter(this, FindPlanet(apiPlanetsRepository))
+    }
+
+    override fun showMessage(message: String){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     override fun showInfoPlanet(infoPlanetReducedDataModel: InfoPlanetReducedDataModel) {

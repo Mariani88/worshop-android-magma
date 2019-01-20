@@ -4,5 +4,5 @@ import com.etermax.magma.worshop.infoplanets.presentation.presenter.InfoPlanetRe
 
 interface MainView {
     fun showInfoPlanet(infoPlanetReducedDataModel: InfoPlanetReducedDataModel)
-    fun showError(errorMessage: String)
+    fun showMessage(message: String)
 }
