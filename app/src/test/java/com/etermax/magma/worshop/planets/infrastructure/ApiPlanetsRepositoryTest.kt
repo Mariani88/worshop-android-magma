@@ -93,6 +93,7 @@ class ApiPlanetsRepositoryTest {
         assertThat(receivedPlanet.edited).isEqualTo(EDITED)
         assertThat(receivedPlanet.url).isEqualTo(URL)
         assertThat(receivedPlanet.diameter).isEqualTo(DIAMETER)
+        assertThat(receivedPlanet.planetId).isEqualTo(PLANET_ID)
     }
 
     private fun whenFindPlanet() {
@@ -104,22 +105,8 @@ class ApiPlanetsRepositoryTest {
     }
 
     private fun givenThatApiReturnValidResponse() {
-        planetResponse = PlanetResponse(
-            NAME,
-            ROTATION_PERIOD,
-            ORBITAL_PERIOD,
-            DIAMETER,
-            CLIMATE,
-            GRAVITY,
-            TERRAIN,
-            SURFACE_WATER,
-            POPULATION,
-            RESIDENTS,
-            FILMS,
-            CREATED,
-            EDITED,
-            URL
-        )
+        planetResponse = PlanetResponse(NAME, ROTATION_PERIOD, ORBITAL_PERIOD, DIAMETER, CLIMATE, GRAVITY, TERRAIN,
+            SURFACE_WATER, POPULATION, RESIDENTS, FILMS, CREATED, EDITED, URL)
         validResponse = Response.success(planetResponse)
         mockClientAndResponse(validResponse)
     }
@@ -144,17 +131,11 @@ class ApiPlanetsRepositoryTest {
         val RESIDENTS = listOf(
             "https://swapi.co/api/people/5/",
             "https://swapi.co/api/people/68/",
-            "https://swapi.co/api/people/81/"
-        )
+            "https://swapi.co/api/people/81/")
 
         val FILMS = listOf("https://swapi.co/api/films/6/", "https://swapi.co/api/films/1/")
         val CREATED = Date()
         val EDITED = Date()
         const val URL = "https://swapi.co/api/planets/2/"
     }
-
-
-
-
-
 }

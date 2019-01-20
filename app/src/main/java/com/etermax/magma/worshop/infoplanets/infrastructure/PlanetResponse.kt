@@ -22,8 +22,8 @@ class PlanetResponse(
 ) {
 
     companion object {
-        fun toPlanet(planetResponse: PlanetResponse): Planet {
-            return Planet(planetResponse.name, planetResponse.rotationPeriod, planetResponse.orbitalPeriod, planetResponse.diameter,
+        fun toPlanet(planetResponse: PlanetResponse, planetId: Long): Planet {
+            return Planet(planetId, planetResponse.name, planetResponse.rotationPeriod, planetResponse.orbitalPeriod, planetResponse.diameter,
                 planetResponse.climate, planetResponse.gravity, planetResponse.terrain, planetResponse.surfaceWater, planetResponse.population,
                 planetResponse.residents, planetResponse.films, planetResponse.created, planetResponse.edited, planetResponse.url)
         }
