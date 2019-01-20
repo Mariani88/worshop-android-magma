@@ -13,13 +13,12 @@ import com.etermax.magma.worshop.infoplanets.presentation.presenter.InfoPlanetRe
 import com.etermax.magma.worshop.infoplanets.presentation.presenter.MainPresenter
 
 class MainActivity : AppCompatActivity(), MainView {
-
     private lateinit var findButton: Button
+
     private lateinit var nameTextView: TextView
     private lateinit var orbitalDaysTextView: TextView
     private lateinit var rotationDaysTextView: TextView
     private lateinit var mainPresenter: MainPresenter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,8 +44,8 @@ class MainActivity : AppCompatActivity(), MainView {
         return MainPresenter(this, FindPlanet(apiPlanetsRepository))
     }
 
-    override fun showMessage(message: String){
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    override fun showErrorMessage() {
+        showMessage("An error was occurred")
     }
 
     override fun showInfoPlanet(infoPlanetReducedDataModel: InfoPlanetReducedDataModel) {
@@ -55,5 +54,13 @@ class MainActivity : AppCompatActivity(), MainView {
                 resources.getString(R.string.orbital_days).format(infoPlanetReducedDataModel.orbitalDays)
         rotationDaysTextView.text =
                 resources.getString(R.string.rotation_days).format(infoPlanetReducedDataModel.rotationDays)
+    }
+
+    override fun showSearching() {
+        showMessage("Searching...")
+    }
+
+    private fun showMessage(message: String){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }

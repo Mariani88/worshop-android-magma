@@ -11,12 +11,16 @@ import io.reactivex.schedulers.Schedulers
 class MainPresenter(private val mainView: MainView, private val findPlanet: FindPlanet) {
 
     fun findInfoPlanet(): Disposable =
-        Single.just(mainView.showMessage("Searching..."))
+        Single.just(mainView.showSearching())
             .flatMap { findPlanet() }
             .map { it.toReducedDataModel() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ mainView.showInfoPlanet(it) }, { mainView.showMessage("An error was occurred") })
+            .subscribe({ mainView.showInfoPlanet(it) }, { mainView.showErrorMessage() })
 
     private fun Planet.toReducedDataModel() = InfoPlanetReducedDataModel(name, orbitalPeriod, rotationPeriod)
+
+    private companion object {
+
+    }
 }
